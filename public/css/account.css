@@ -1,0 +1,43 @@
+.s-accountbody{
+    height: 100vh;
+    background: linear-gradient(-35deg, #07E5CA 28%,  rgba(255, 255, 255, 0.2)), url('/Background-removebg-preview.png');
+}
+
+.s-accountimg{
+    text-align: center;
+    /* padding: 40px;
+    background-color: #FFF; */
+}
+
+.s-accountimg img{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    top: -20px;
+    z-index: 2;
+    box-shadow: 4px 10px 14px 0px rgba(0, 0, 0, 0.7);
+
+}
+
+.s-details{
+    box-shadow: 4px 20px 24px 0px rgba(0, 0, 0, 0.5);
+    width: 30%;
+    height: 60%;
+    margin: 20px auto;
+    text-align: center;
+    top: 100px;
+    background-color: #FFF;
+    border-radius: 40px;
+    z-index: 0;
+    padding: 20px;
+}
+
+.s-order{
+    background-color: #18CC7A;
+    outline: none;
+    border: none;
+    color: #FFF;
+    padding: 2px 8px;
+    font-size: 18px;
+    margin: 20px;
+}
