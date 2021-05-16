@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/prof.css">
+    <title>Profiles</title>
+</head>
+<body>
+<div class="content">
+    <div class="container">
+        <div class="row">
+          <% for(i=0;i<products.length;i++){%>
+                          <% if(products[i]._id!=accountid){%>
+                            <h4><%=products[i].UserName%></h4>
+                        <div class="mt-4">
+                          <div class="col-lg-4">
+                              <div class="text-center card-box">
+                                  <div class="member-card pt-2 pb-2">
+                                      <!-- <div class="thumb-lg member-thumb mx-auto"><img src="https://bootdey.com/img/Content/avatar/avatar2.png" class="rounded-circle img-thumbnail" alt="profile-image"></div> -->
+                                      <div class="">
+                            <h6>Type : <span class="text-muted"><%=products[i].Type%></span></h6>
+                            <h6>Pincode: <span class="text-muted"><%=products[i].Pin%></span></h6>
+                            <h6>Target : <span class="text-muted"<%=products[i].Target%>></span></h6>
+                            <h6>Contact : <span class="text-muted"<%=products[i].Contact%>></span></h6>
+                        </div>
+                        <%}%>
+                        <form class="" action="/chat" target="_blank" method="post">
+                            <input type="hidden" name="user" value="<%=username%>">
+                        <button type="submit" class="btn btn-primary mt-3 btn-rounded waves-effect w-md waves-light"  name="button" value="<%=products[i].UserName%>">Message Now</button>
+                        </form>
+                    </div>
+                </div>
+              </div>
+      </div>
+          <%}%>
+
+</div>
+
+
+
+
+</div>
+
+    <!-- container -->
+</div>
+</body>
+</html>

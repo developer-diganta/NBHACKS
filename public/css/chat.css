@@ -1,0 +1,59 @@
+.dChatHead{
+  background: rgba(7, 229, 202, 0.53);
+  text-align:center;
+  padding: 1%;
+}
+.dAvatar{
+  padding:5px;
+  width:100px;
+}
+.dchat-area{
+  border:1px solid black;
+  border-radius: 10px;
+  margin-top:5px;
+  overflow-y: scroll;
+  max-height:500px;
+  min-height:525px;
+}
+
+.dchats{
+  background: #C4C4C4;
+  margin:3px;
+  padding: 1.5%;
+  border-radius: 10px;
+  border:2px;
+  display: inline-block;
+  margin-left:5px;
+  margin-right:5px;
+}
+
+.d-right{
+  text-align: right;
+}
+.dmessage{
+  margin-top:10px;
+  text-align: center;
+  margin-bottom: 5px;
+}
+.dmessage-area{
+  width:80%;
+  height:2.5rem;
+}
+
+.dsendbutton{
+  height:2.5rem;
+  width:10%;
+  background-color:rgba(7, 229, 202, 0.53);
+  border:none;
+  font-weight:800;
+}
+
+.dsendbutton:active{
+    background-color:rgba(7, 229, 202);
+}
+
+.dtime{
+  font-size:10px;
+  display: block;
+  text-align:left
+}

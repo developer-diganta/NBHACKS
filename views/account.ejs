@@ -44,15 +44,18 @@
                 <%= accountInfo.Address %>
             </p>
             <p>
-                <%= accountInfo.Description %>
-            </p>
-            <p>
-                <%= userid %>
-            </p>
-            <p>
                 <%= accountInfo.Type %>
             </p>
-            <button class="s-order">CONTACT</button>
+            <button class="s-order">CONTACTS</button>
+            <a href="/profile/<%=accountInfo._id%>">ADD HERE</a>
+            <div class="chats_">
+              <% for(i=0;i<accountInfo.chats.length;i++){%>
+                <form action="/chat" method="post">
+                  <input type="hidden" value="<%=accountInfo.UserName%>" name="user"/>
+                  <button type="submit" name="button" value="<%=accountInfo.chats[i]%>"><%=accountInfo.chats[i]%></button>
+                </form>
+              <%}%>
+            </div>
         </div>
     </div>
 </body>

@@ -21,7 +21,7 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title text-center">Login</h5>
-                        <p>
+                        <p style="color:red; text-align:center">
                             <%= msg %>
                         </p>
                         <!-- starting of form -->
@@ -43,18 +43,17 @@
 
                             <div class="form-group">
                                 <input type="password" name="inputConfirmPassword" class="form-control"
-                                    placeholder="Password" required>
+                                    placeholder="Confirm Password" required>
                             </div>
 
                             <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Login</button>
 
                         </form>
                         <!-- ending of form -->
-                        <% if(msg !="" ){ %>
-                          <form action="/signin" method="POST" style="text-align:center; margin-top:5px;">
+                          <form action="/signin" method="get" style="text-align:center; margin-top:5px;">
                               New User? <button class="btn btn-primary" type="submit" name="button">Sign Up</button>
                           </form>
-                            <% } %>
+
                     </div>
                 </div>
             </div>

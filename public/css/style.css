@@ -44,7 +44,7 @@
 }
 
 .s-text{
-    width: 78%;    
+    width: 78%;
     display: inline-block;
     color: rgb(194, 193, 193);
     font-weight: 500;
@@ -81,7 +81,88 @@
     padding: 3px 8px;
 }
 
+.chat{
+    background-color: hsl(69, 82%, 61%);
+    outline: none;
+    border: none;
+    color: #FFF;
+    padding: 1px 4px;
+    text-align: center;
+}
+
 .navbar-brand img{
     width: 40px;
     height: 40px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+body{
+    padding: 0;
+    margin: 0;
+}
+
+.container-fluid.col-md-12{
+    background: rgba(7, 229, 202, 0.53);
+    height: 100vh;
+}
+
+.text-content{
+    padding: 200px;
+}
+
+.cards{
+    padding: 20px;
+    display: flex;
+}
+
+.card{
+    margin: 30px;
+    height: 270px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.alt{
+    margin-top: 80px;
+}
+
+.k{
+    padding: 30px;
+}
+
+.kush{
+    background: #FFA500;
+    height: 300px;
 }

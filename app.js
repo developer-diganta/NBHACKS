@@ -11,6 +11,30 @@ mongoose.set('useFindAndModify', false);
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
+const http=require("http");
+const socketio=require("socket.io");
+const server = http.createServer(app);
+const io=socketio(server);
+
+
+
+
+
+
+
+
+
+let currentlyOnline=[];
+function formatMessage(user,message){
+  const msg={
+    name:user,
+    message:message
+  }
+  return msg;
+}
+
+
+
 
 mongoose.connect("mongodb://localhost:27017/UsersSignin", {
     useNewUrlParser:true,
@@ -21,6 +45,23 @@ mongoose.connect("mongodb://localhost:27017/UsersSignin", {
 }).catch((e) => {
     console.log("No connection");
 })
+
+
+
+
+const ChatSchema ={
+  RoomName: {
+    type:String
+  },
+  chats:[]
+}
+
+const Chat=mongoose.model("Chat",ChatSchema);
+
+
+
+
+
 
 const signInSchema = {
     UserName:{
@@ -73,7 +114,8 @@ const signInSchema = {
     Description : String,
     Stocks : {
         type : String
-    }
+    },
+    chats:[]
 }
 
 const SignIn = mongoose.model("SignIn", signInSchema);
@@ -130,6 +172,7 @@ app.post('/signin', (req, res) => {
                 if(error){
                     console.log(error);
                 } else {
+                  var t="Kushal";
                     if(!data){
                         const siginInData = new SignIn({
                             UserName: userName,
@@ -142,12 +185,12 @@ app.post('/signin', (req, res) => {
                             Organization: org,
                             Interest : interest,
                             Description : String(des),
-                            Stock : stock
-                        })
+                            Stock : stock,
+                        });
                         const usersSignin = await siginInData.save();
                         console.log(usersSignin);
                         res.render('home', {accountid: usersSignin._id, login: true});
-                        
+
                     } else {
                         res.render('home', {accountid: data._id, login: true});
                     }
@@ -176,7 +219,7 @@ app.post('/login', (req, res) => {
                 console.log(error);
             } else {
                 if(!data){
-                    res.render('login', {msg: "Could not found email!"});
+                    res.render('login', {msg: "User not found!"});
                 }
                 else if(password != confPassword){
                     res.render('login', {msg: "Password did not match"});
@@ -198,6 +241,8 @@ app.get('/account/:userid', (req, res) => {
             if(error){
                 console.log(error);
             } else {
+              console.log(data);
+              data.chats.push("Kushal");
                 res.render('account', {accountInfo: data, userid: userId});
             }
         })
@@ -205,6 +250,37 @@ app.get('/account/:userid', (req, res) => {
         console.log(error);
     }
 })
+
+
+
+app.get("/products/:userid",(req,res)=>{
+  try{
+
+        const newProduct = new Product({
+        Pid : "60a0b540ea04cf62d0548d3a",
+        Name : "Default",
+        PdtOwner : "y",
+        Stocks : "100",
+        Review : "4",
+        Prise : "1000",
+        Description : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    });
+newProduct.save();
+userid=req.params.userid;
+console.log("user"+userid);
+Product.find((error, products) => {
+            // console.log(products);
+            res.render('product',{productArr: products,accountid:userid,login:true})
+        })
+
+  }catch(error){
+    console.log(error);
+  }
+});
+
+
+
+
 
 app.post('/account/:userid', (req, res) => {
     try {
@@ -223,6 +299,135 @@ app.post('/account/:userid', (req, res) => {
     }
 })
 
-app.listen(3000, () => {
-    console.log("Server is running.");
+
+
+
+
+
+
+io.on("connection",socket=>{
+  socket.on("joinRoom",({user,roomname})=>{
+    Chat.findOne({RoomName:roomname},async(error,data)=>{
+      if(error){
+        console.log(error);
+      }
+      else{
+        if(!data){
+          const newRoom=new Chat({
+            RoomName:roomname,
+            chat:[]
+          })
+          const usersChat = await newRoom.save();
+
+        }
+      }
+    })
+    console.log("UNAME"+user);
+    var USER={
+      id:socket.id,
+      user:user,
+      room:roomname
+    };
+    console.log(USER);
+    currentlyOnline.push(USER);
+    console.log(currentlyOnline);
+    socket.join(USER.room);
+    socket.broadcast.to(USER.room).emit("message",formatMessage(USER.user,`${USER.user} is Online`));
+  });
+
+socket.on("chatMessage",(msg)=>{
+  console.log(msg);
+  console.log(currentlyOnline);
+  console.log(socket.id);
+
+  let currentUSER;
+  for(i=0;i<currentlyOnline.length;i++){
+    if(currentlyOnline[i].id==socket.id){
+      console.log("in");
+      currentUSER=currentlyOnline[i];
+      console.log(currentUSER);
+    }
+  }
+  room=currentUSER.room;
+  console.log("THE ROOM IS :"+room);
+  Chat.findOne({RoomName:room},function(err,foundList){
+    if(!foundList)
+    console.log("NOTTTTT");
+    foundList.chats.push(currentUSER.user+"->"+msg);
+    foundList.save();
+  })
+  Chat.findOne({RoomName:room},function(err,foundList){
+    if(!foundList)
+    console.log("NOTTTTT");
+    console.log(foundList.chats);
+  })
+  console.log(currentUSER.room);
+  io.to(currentUSER.room).emit("message",formatMessage(currentUSER.user,msg));
+});
+
+socket.on("disconnect",()=>{
+  for(i=0;i<currentlyOnline.length;i++){
+    if(currentlyOnline[i].id==socket.id){
+      const user=currentlyOnline[i];
+      io.to(user.room).emit("message",`${user.name} has left!`);
+
+    }
+  }
+});
+});
+
+app.post("/chat",function(req,res){
+  console.log(req.body.button);
+  console.log(req.body.user);
+  res.render("index",{name:req.body.user,chatter:req.body.button});
 })
+
+
+
+
+
+
+
+app.get('/singleProduct/:productid', (req, res) => {
+  const userid=req.params.userid;
+    const productId = req.params.productid;
+    try {
+        Product.findOneAndUpdate({_id : productId},(error, products) => {
+            console.log("************");
+            // console.log(products);
+            res.render('singlePage',{userid:userid,login:true})
+        })
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+app.post('/singleProduct/:productid', (req, res) => {
+    console.log("************");
+    const userid=req.body.userid;
+
+    const productId = req.params.productid;
+    try {
+        Product.findOne({_id : productId},(error, products) => {
+            // console.log(products);
+            res.render('singlePage', {singleArr: products,accountid:userid,login:true});
+        })
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+
+app.get("/profile/:userid",function(req,res){
+  SignIn.find((error,products) => {
+    userid=req.params.userid;
+    res.render("profile",{accountid:userid,products:products});
+  })
+})
+
+
+
+
+server.listen(process.env.PORT || 3000,function(){
+  console.log("Running on 3000")
+});
