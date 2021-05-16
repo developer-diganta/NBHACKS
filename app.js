@@ -36,7 +36,7 @@ function formatMessage(user,message){
 
 
 
-mongoose.connect("mongodb+srv://surya-admin:test@1234@cluster0.ilsr2.mongodb.net/UsersSignin", {
+mongoose.connect("mongodb://localhost:27017/UsersSignin", {
     useNewUrlParser:true,
     useUnifiedTopology:true,
     useCreateIndex:true
