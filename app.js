@@ -36,7 +36,7 @@ function formatMessage(user,message){
 
 
 
-mongoose.connect("mongodb://localhost:27017/UsersSignin", {
+mongoose.connect("mongodb+srv://surya-admin:test@1234@cluster0.ilsr2.mongodb.net/UsersSignin", {
     useNewUrlParser:true,
     useUnifiedTopology:true,
     useCreateIndex:true
@@ -333,6 +333,7 @@ io.on("connection",socket=>{
     console.log(currentlyOnline);
     socket.join(USER.room);
     socket.broadcast.to(USER.room).emit("message",formatMessage(USER.user,`${USER.user} is Online`));
+    socket.emit("")
   });
 
 socket.on("chatMessage",(msg)=>{
@@ -377,6 +378,12 @@ socket.on("disconnect",()=>{
 });
 
 app.post("/chat",function(req,res){
+  SignIn.findOne({_id:req.body.user_id},function (error,l){
+    if(l.chats.length!=0){
+      console.log(l);
+      res.render("prevChat",{name:req.body.user,chatter:req.body.button,chat:l.chats});
+    }
+  })
   console.log(req.body.button);
   console.log(req.body.user);
   res.render("index",{name:req.body.user,chatter:req.body.button});
@@ -419,14 +426,15 @@ app.post('/singleProduct/:productid', (req, res) => {
 
 
 app.get("/profile/:userid",function(req,res){
+  userid=req.params.userid;
+  var a;
+  SignIn.findOne({_id:userid},(error,val)=>{
+    a=val.UserName;
+  })
   SignIn.find((error,products) => {
-    userid=req.params.userid;
-    res.render("profile",{accountid:userid,products:products});
+    res.render("profile",{accountid:userid,products:products,name:a});
   })
 })
-
-
-
 
 server.listen(process.env.PORT || 3000,function(){
   console.log("Running on 3000")

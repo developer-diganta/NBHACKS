@@ -29,7 +29,7 @@
     <div class="s-accountbody">
         <div class="container">
             <div class="s-accountimg">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80"
+                <img src="https://p.kindpng.com/picc/s/78-785827_user-profile-avatar-login-account-male-user-icon.png"
                     alt="">
             </div>
         </div>
@@ -48,7 +48,7 @@
             </p>
             <button class="s-order">CONTACTS</button>
             <a href="/profile/<%=accountInfo._id%>">ADD HERE</a>
-            <div class="chats_">
+            <div class="chats_" style="display:none">
               <% for(i=0;i<accountInfo.chats.length;i++){%>
                 <form action="/chat" method="post">
                   <input type="hidden" value="<%=accountInfo.UserName%>" name="user"/>
